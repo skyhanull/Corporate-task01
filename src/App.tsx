@@ -1,11 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
-
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
+import MainPage from './pages/MainPage'
+import NotFound from './pages/NotFound'
+import tripApi from './store/tripslice/tripThunk'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from './store/store'
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch<AppDispatch>()
 
-  return <div className='App'></div>
+  useEffect(() => {
+    dispatch(tripApi())
+  }, [dispatch])
+
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Navigate to='/main' />} />
+          <Route path='/main' element={<MainPage />}>
+            <Route path=':name/:id' element={<MainPage />} />
+          </Route>
+
+          {/* <Route path='/reservations' element={<Reservations />} /> */}
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
 }
 
 export default App
