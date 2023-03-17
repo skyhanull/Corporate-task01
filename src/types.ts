@@ -1,4 +1,4 @@
-export default interface ITravelInfo {
+export default interface ITriplInfo {
   idx: number
   name: string
   mainImage: string
