@@ -39,15 +39,13 @@ function TripCards({
     registrationDate,
     description,
   }
-  // console.log(addListData)
+
   const addToCartHandler = (idx: number) => {
     tripFilter.result.find(item => item.idx === idx)
       ? dispatch(addcartlist(addListData))
       : null
     // isOpen()
   }
-
-  console.log(trip.result)
 
   return (
     <div>
