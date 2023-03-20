@@ -3,9 +3,10 @@ import './App.css'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import MainPage from './pages/MainPage'
 import NotFound from './pages/NotFound'
-import tripApi from './store/tripslice/tripThunk'
+import tripApi from './store/trip/tripThunk'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from './store/store'
+
 function App() {
   const dispatch = useDispatch<AppDispatch>()
 
