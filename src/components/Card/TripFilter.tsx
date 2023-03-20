@@ -9,9 +9,7 @@ import {
   RangeSliderThumb,
   Button,
 } from '@chakra-ui/react'
-import { setlist } from '../../store/trip/tripSlice'
-// import { Dispatch } from '@reduxjs/toolkit'
-import tripApi from '../../store/trip/tripThunk'
+import { setlist, filterspace, filterprice } from '../../store/trip/tripSlice'
 
 function TripCard() {
   const { name, id } = useParams()
@@ -19,12 +17,11 @@ function TripCard() {
   const [spaceName, setSpaceName] = useState<string[]>([])
   const [price, setPrice] = useState<string[]>([])
   const dispatch = useDispatch()
-  console.log(name)
-  // searchParams.set('sort', 'clear')
-  // setSearchParams(searchParams)
-  // console.log(name)
-  // console.log(id)
+
   const tripFilter = useSelector((state: RootState) => state.Triplist)
+  const tripFilters = useSelector((state: RootState) => state.Triplist)
+
+  console.log(tripFilters.itemfilter)
 
   console.log(tripFilter)
   const AAA = tripFilter.result.map((el: any) => el.spaceCategory)
@@ -33,6 +30,8 @@ function TripCard() {
   const category = ['강원', '서울', '부산', '대구', '제주']
 
   const spaceArray = (name: string) => {
+    console.log(name)
+    dispatch(filterspace(name))
     setSpaceName([...spaceName, name])
     searchParams.set('name', name)
     if (searchParams === undefined) {
@@ -45,8 +44,13 @@ function TripCard() {
   // console.log(spaceName)
 
   const filterPriceHandler = () => {
-    const pre = price?.[0]
-    const next = price?.[1]
+    const pre:string = price?.[0]
+    const next:string = price?.[1]
+    // const pricearray:  = {
+    //   pre: price?.[0],
+    //   next: price?.[1],
+    // }
+    filterprice(dispatch(price))
 
     const B =
       next !== undefined
