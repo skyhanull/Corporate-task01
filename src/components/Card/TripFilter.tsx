@@ -21,36 +21,37 @@ function TripCard() {
   const tripFilter = useSelector((state: RootState) => state.Triplist)
   const tripFilters = useSelector((state: RootState) => state.Triplist)
 
-  console.log(tripFilters.itemfilter)
-
-  console.log(tripFilter)
   const AAA = tripFilter.result.map((el: any) => el.spaceCategory)
 
-  // const category = [...new Set(AAA)]
   const category = ['강원', '서울', '부산', '대구', '제주']
 
+  const iniparams = searchParams.get('name')
   const spaceArray = (name: string) => {
-    console.log(name)
     dispatch(filterspace(name))
     setSpaceName([...spaceName, name])
-    searchParams.set('name', name)
-    if (searchParams === undefined) {
+    // console.log(spaceName)
+    // searchParams.set('name', name)
+    // console.log(searchParams.get('name'))
+    // setSearchParams({ name: name })
+    // console.log(searchParams.get('name'))
+    if (iniparams === null) {
+      searchParams.set('name', ...spaceName)
+      setSearchParams(searchParams)
+      // searchParams.set('name', name)
+    } else {
+      searchParams.append('name', name)
       setSearchParams(searchParams)
     }
-    searchParams.append('name', name)
   }
-  // console.log(searchParams.get('name'))
-  // const filtername = searchParams.get('name')
-  // console.log(spaceName)
-
+  console.log(searchParams.getAll('name'))
   const filterPriceHandler = () => {
-    const pre:string = price?.[0]
-    const next:string = price?.[1]
+    const pre: string = price?.[0]
+    const next: string = price?.[1]
     // const pricearray:  = {
     //   pre: price?.[0],
     //   next: price?.[1],
-    // }
-    filterprice(dispatch(price))
+    // // }
+    // filterprice(dispatch(price))
 
     const B =
       next !== undefined
@@ -98,15 +99,15 @@ function TripCard() {
           <button onClick={() => spaceArray(el)}>{el}</button>
         ))}
       </div>
-      <Link
+      {/* <Link
         to={`/main/?${spaceName ? spaceName : ''}/?min=${price[0]}?max=${
           price[1]
         }`}
-      >
-        <button type='button' onClick={submitHandler}>
-          제출
-        </button>
-      </Link>
+      > */}
+      <button type='button' onClick={submitHandler}>
+        제출
+      </button>
+      {/* </Link> */}
     </div>
   )
 }
