@@ -1,11 +1,8 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
 import ITravelInfo from '../../types'
-import { RootState } from '../store'
+
 import tripApi from './tripThunk'
-import { filterItem } from '../../util/util'
-import { it } from 'node:test'
-import { Accordion } from '@chakra-ui/react'
 
 export interface ITripState {
   readonly result: ITravelInfo[]
@@ -20,10 +17,12 @@ interface Iactionprice {
 
 const result: ITravelInfo[] = []
 const itemfilter: ITravelInfo[] = []
+const pricefilter: ITravelInfo[] = []
+const spacefilter: ITravelInfo[] = []
 
 export const tripSlice = createSlice({
   name: 'tripSlice',
-  initialState: { result, itemfilter },
+  initialState: { result, itemfilter, spacefilter, pricefilter },
   reducers: {
     setlist: (state, action) => {
       state.result = action.payload
@@ -32,23 +31,21 @@ export const tripSlice = createSlice({
       state.result = action.payload
     },
     filterspace: (state, action) => {
-      const A = state.result.filter(el => el.spaceCategory === action.payload)
-      if (state.itemfilter.length !== 0) {
-        const NK = [...new Set(state.itemfilter)]
-        state.itemfilter = NK
-      }
-      console.log(A)
-      state.itemfilter.push(...A)
+      console.log(action.payload)
+      const A = state.result.filter(item =>
+        action.payload.find((sub: any) => item.spaceCategory === sub)
+      )
+
+      state.spacefilter = [...A, ...state.spacefilter]
     },
     filterprice: (state, action) => {
       const J = state.result.filter(
         el => el.price >= action.payload.pre && el.price <= action.payload.next
       )
-      if (state.itemfilter.length !== 0) {
-        const NK = [...new Set(state.itemfilter)]
-        state.itemfilter = NK
-      }
-      state.itemfilter.push(...J)
+      state.pricefilter = J
+    },
+    filterpriced: (state, action) => {
+      state.itemfilter = action.payload
     },
   },
   extraReducers: builder => {
@@ -58,6 +55,7 @@ export const tripSlice = createSlice({
   },
 })
 
-export const { setlist, filterspace, filterprice } = tripSlice.actions
+export const { setlist, filterspace, filterprice, filterpriced } =
+  tripSlice.actions
 // store에서 add, remove, complte 액션을 내보낸다.
 export default tripSlice.reducer

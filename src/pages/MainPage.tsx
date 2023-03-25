@@ -5,7 +5,10 @@ import { RootState } from '../store/store'
 
 function MainPage() {
   const tripFilter = useSelector((state: RootState) => state.Triplist)
-  console.log(tripFilter)
+
+  const itemDataList =
+    tripFilter.itemfilter.length > 0 ? tripFilter.itemfilter : tripFilter.result
+
   return (
     <div>
       <TripFitler />
@@ -17,9 +20,9 @@ function MainPage() {
           gap: '10px',
         }}
       >
-        {tripFilter.result.map(list => (
+        {itemDataList.map(list => (
           <TripCard
-            key={list.idx}
+            key={list.idx + +100}
             idx={list.idx}
             name={list.name}
             mainImage={list.mainImage}
@@ -30,8 +33,34 @@ function MainPage() {
             registrationDate={list.registrationDate}
           />
         ))}
+        {/* {tripFilter.itemfilter.length > 0
+          ? tripFilter.itemfilter.map(list => (
+              <TripCard
+                key={list.idx + +100}
+                idx={list.idx}
+                name={list.name}
+                mainImage={list.mainImage}
+                description={list.description}
+                spaceCategory={list.spaceCategory}
+                price={list.price}
+                maximumPurchases={list.maximumPurchases}
+                registrationDate={list.registrationDate}
+              />
+            ))
+          : tripFilter.result.map(list => (
+              <TripCard
+                key={list.idx}
+                idx={list.idx}
+                name={list.name}
+                mainImage={list.mainImage}
+                description={list.description}
+                spaceCategory={list.spaceCategory}
+                price={list.price}
+                maximumPurchases={list.maximumPurchases}
+                registrationDate={list.registrationDate}
+              />
+            ))} */}
       </div>
-      {/* <TripCard /> */}
     </div>
   )
 }
