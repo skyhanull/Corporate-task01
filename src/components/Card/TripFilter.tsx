@@ -28,20 +28,22 @@ function TripCard() {
   const iniparams = searchParams.get('name')
   const spaceArray = (name: string) => {
     dispatch(filterspace(name))
-    setSpaceName([...spaceName, name])
+    // setSpaceName([...spaceName, name])
+    spaceName.push(name)
     // console.log(spaceName)
     // searchParams.set('name', name)
     // console.log(searchParams.get('name'))
     // setSearchParams({ name: name })
     // console.log(searchParams.get('name'))
+    console.log(spaceName)
+    const c = spaceName.join().trim()
     if (iniparams === null) {
-      searchParams.set('name', ...spaceName)
+      searchParams.set('name', name)
       setSearchParams(searchParams)
-      // searchParams.set('name', name)
     } else {
-      searchParams.append('name', name)
-      setSearchParams(searchParams)
+      setSearchParams({ name: c })
     }
+    // setSearchParams(searchParams)
   }
   console.log(searchParams.getAll('name'))
   const filterPriceHandler = () => {
