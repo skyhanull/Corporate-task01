@@ -11,6 +11,10 @@ import {
 } from '@chakra-ui/react'
 import { setlist, filterspace, filterprice } from '../../store/trip/tripSlice'
 
+interface Iprice {
+  pre: string
+  next: string
+}
 function TripCard() {
   const { name, id } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -19,23 +23,18 @@ function TripCard() {
   const dispatch = useDispatch()
 
   const tripFilter = useSelector((state: RootState) => state.Triplist)
-  const tripFilters = useSelector((state: RootState) => state.Triplist)
-
   const AAA = tripFilter.result.map((el: any) => el.spaceCategory)
 
   const category = ['강원', '서울', '부산', '대구', '제주']
 
   const iniparams = searchParams.get('name')
+
   const spaceArray = (name: string) => {
-    dispatch(filterspace(name))
-    // setSpaceName([...spaceName, name])
-    spaceName.push(name)
-    // console.log(spaceName)
-    // searchParams.set('name', name)
-    // console.log(searchParams.get('name'))
-    // setSearchParams({ name: name })
-    // console.log(searchParams.get('name'))
-    console.log(spaceName)
+    if (!spaceName.includes(name)) {
+      spaceName.push(name)
+      dispatch(filterspace(name))
+    }
+
     const c = spaceName.join().trim()
     if (iniparams === null) {
       searchParams.set('name', name)
@@ -43,39 +42,40 @@ function TripCard() {
     } else {
       setSearchParams({ name: c })
     }
-    // setSearchParams(searchParams)
   }
-  console.log(searchParams.getAll('name'))
-  const filterPriceHandler = () => {
-    const pre: string = price?.[0]
-    const next: string = price?.[1]
-    // const pricearray:  = {
-    //   pre: price?.[0],
-    //   next: price?.[1],
-    // // }
-    // filterprice(dispatch(price))
 
-    const B =
-      next !== undefined
-        ? tripFilter?.result.filter(
-            items => items.price >= +pre! && items.price <= +next!
-          )
-        : tripFilter?.result
+  // const ASDF = (e: any) => {
+  //   setPrice(e.map((item: any) => item.toString()))
+  // }
 
-    return B
+  const filterPriceHandler = (e: any) => {
+    const pricearray: Iprice = {
+      pre: e[0],
+      next: e[1],
+    }
+    dispatch(filterprice(pricearray))
+
+    // const B =
+    //   next !== undefined
+    //     ? tripFilter?.result.filter(
+    //         items => items.price >= +pre! && items.price <= +next!
+    //       )
+    //     : tripFilter?.result
+
+    // return B
   }
 
   const submitHandler = () => {
-    const A = tripFilter.result.filter(x1 =>
-      spaceName.length > 0
-        ? spaceName.find(x2 => x1.spaceCategory === x2)
-        : x1.spaceCategory
-    )
-    const Fspace = filterPriceHandler()
-    const arr2 = A.filter(x1 => Fspace.some(x2 => x1.idx === x2.idx))
-    dispatch(setlist(arr2))
-    // tripFilter = { result: arr2 }
-    console.log(arr2)
+    // const A = tripFilter.result.filter(x1 =>
+    //   spaceName.length > 0
+    //     ? spaceName.find(x2 => x1.spaceCategory === x2)
+    //     : x1.spaceCategory
+    // )
+    // const Fspace = filterPriceHandler()
+    // const arr2 = A.filter(x1 => Fspace.some(x2 => x1.idx === x2.idx))
+    // dispatch(setlist(arr2))
+    // console.log(arr2)
+    // filterPriceHandler()
   }
 
   return (
@@ -86,7 +86,7 @@ function TripCard() {
         min={0}
         max={30000}
         step={5000}
-        onChange={e => setPrice(e.map(item => item.toString()))}
+        onChange={e => filterPriceHandler(e)}
       >
         <RangeSliderTrack>
           <RangeSliderFilledTrack />

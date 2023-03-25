@@ -3,55 +3,56 @@ import { useSelector } from 'react-redux'
 import ITravelInfo from '../../types'
 import { RootState } from '../store'
 import tripApi from './tripThunk'
-import { tripFilter } from '../../util/util'
+import { filterItem } from '../../util/util'
 import { it } from 'node:test'
-
-// const tripFilter = useSelector((state: RootState) => state.Triplist)
-// console.log(tripFilter)
+import { Accordion } from '@chakra-ui/react'
 
 export interface ITripState {
   readonly result: ITravelInfo[]
   readonly itemfilter: ITravelInfo[]
   readonly priceRange: ITravelInfo[]
-  // readonly selectedtripList: ITripInfo | null
 }
 
 interface Iactionprice {
   pre: string
   next: string
 }
-// interface ISliceType:ITravelInfo[] {
-//   result: [],
 
-// }
 const result: ITravelInfo[] = []
 const itemfilter: ITravelInfo[] = []
+
 export const tripSlice = createSlice({
   name: 'tripSlice',
   initialState: { result, itemfilter },
   reducers: {
     setlist: (state, action) => {
       state.result = action.payload
-      console.log(state.result)
     },
     resetlist: (state, action) => {
       state.result = action.payload
-      console.log(state.result)
     },
     filterspace: (state, action) => {
-      console.log(action.payload)
       const A = state.result.filter(el => el.spaceCategory === action.payload)
-      state.itemfilter = [...A, ...state.itemfilter]
+      if (state.itemfilter.length !== 0) {
+        const NK = [...new Set(state.itemfilter)]
+        state.itemfilter = NK
+      }
+      console.log(A)
+      state.itemfilter.push(...A)
     },
     filterprice: (state, action) => {
-      console.log(action.payload)
-      const A = state.result.filter(el => el.price === action.payload)
-      // state.itemfilter = [...A, ...state.itemfilter]
+      const J = state.result.filter(
+        el => el.price >= action.payload.pre && el.price <= action.payload.next
+      )
+      if (state.itemfilter.length !== 0) {
+        const NK = [...new Set(state.itemfilter)]
+        state.itemfilter = NK
+      }
+      state.itemfilter.push(...J)
     },
   },
   extraReducers: builder => {
     builder.addCase(tripApi.fulfilled, (state, action) => {
-      console.log(action)
       state.result = action.payload
     })
   },
