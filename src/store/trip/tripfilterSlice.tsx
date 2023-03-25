@@ -14,11 +14,9 @@ export const tripSlice = createSlice({
   reducers: {
     setlist: (state, action) => {
       state.result = action.payload
-      console.log(state.result)
     },
     resetlist: (state, action) => {
       state.result = action.payload
-      console.log(state.result)
     },
     // filterspace: (state, action) => {
     //   // state.result = []
@@ -33,7 +31,6 @@ export const tripSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(tripApi.fulfilled, (state, action) => {
-      console.log(action)
       state.result = action.payload
     })
   },
