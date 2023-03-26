@@ -27,7 +27,7 @@ function TripCard() {
   const [spaceName, setSpaceName] = useState<string[]>([])
   // const spaceName = []
   const [nameSpaceparam, setNameSpaceParam] = useState('')
-  const [price, setPrice] = useState<string[]>([])
+  const [price, setPrice] = useState<string[]>(['0', '0'])
   const dispatch = useDispatch()
 
   const tripFilter = useSelector((state: RootState) => state.Triplist)
@@ -89,24 +89,15 @@ function TripCard() {
   //   urlSearchHandler(spaceName)
   // }
 
-  const spaceArray = useCallback(() => {
-    // if (!spaceName.includes(namek)) {
-    //   setNameSpaceParam(namek)
-    //   // spaceName.push(namek)
-    // }
+  // const spaceArray = useCallback(() => {
+  //   // if (!spaceName.includes(namek)) {
+  //   //   setNameSpaceParam(namek)
+  //   //   // spaceName.push(namek)
+  //   // }
 
-    urlSearchHandler(spaceArray)
+  //   urlSearchHandler(spaceArray)
 
-    // spaceName.push(nameSpaceparam)
-    // // const c = spaceName.join().trim()
-    // const A = [...spaceName, namek]
-    // AAAAA(namek)
-  }, [urlSearchHandler])
-  // spaceArray(nameSpaceparam)
-  // spaceArray()
-  // const ASDF = (e: any) => {
-  //   setPrice(e.map((item: any) => item.toString()))
-  // }
+  // }, [urlSearchHandler])
 
   useEffect(() => {
     const AAAAA = () => {
@@ -137,32 +128,45 @@ function TripCard() {
   }
 
   const submitHandler = useCallback(() => {
-    const pricearray: Iprice = {
-      pre: price[0],
-      next: price[1],
-    }
-    dispatch(filterspace(spaceName))
-    dispatch(filterprice(pricearray))
-  }, [dispatch, price, spaceName])
+    // const pricearray = {
+    //   urlNameparams: spaceName,
+    //   urlPriceMinParams: +price[0],
+    //   uurlPriceManParams: +price[1],
+    // }
+    // dispatch(filterspace(pricearray))
+
+    const KK =
+      spaceName.length !== 0
+        ? tripFilter.result.filter(x1 =>
+            spaceName.find(x2 => x1.spaceCategory === x2)
+          )
+        : tripFilter.result
+    const LLLL =
+      +price[1] !== 0
+        ? KK.filter(el => el.price >= +price[0] && el.price <= +price[1])
+        : KK
+
+    dispatch(filterprice(LLLL))
+  }, [dispatch, price, spaceName, tripFilter.result])
 
   useEffect(() => {
     submitHandler()
   }, [submitHandler])
 
   useEffect(() => {
-    if (tripFilter.itemfilter.length === 0 && searchParams.get('name')) {
+    if (tripFilter.itemfilter.length > 0 || searchParams.get('name')) {
       const urlNameparams = searchParams.get('name')?.split(',')
       const urlPriceMinParams = searchParams.get('min')
       const uurlPriceManParams = searchParams.get('max')
 
-      // const KK = tripFilter.result.filter(x1 =>
-      //   searchParams
-      //     .get('name')
-      //     ?.split(',')
-      //     .find(x2 => x1.spaceCategory === x2)
-      // )
-      // dispatch(filterpricedd(KK))
-      dispatch(filterpricedd(urlNameparams))
+      const KK = tripFilter.result.filter(x1 =>
+        searchParams
+          .get('name')
+          ?.split(',')
+          .find(x2 => x1.spaceCategory === x2)
+      )
+      dispatch(filterpricedd(KK))
+      // dispatch(filterpricedd(urlNameparams))
     }
   }, [dispatch, searchParams, tripFilter.itemfilter.length, tripFilter.result])
 
