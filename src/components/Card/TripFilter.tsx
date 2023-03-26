@@ -127,48 +127,92 @@ function TripCard() {
     // return B
   }
 
-  const submitHandler = useCallback(() => {
-    // const pricearray = {
-    //   urlNameparams: spaceName,
-    //   urlPriceMinParams: +price[0],
-    //   uurlPriceManParams: +price[1],
-    // }
-    // dispatch(filterspace(pricearray))
+  useEffect(() => {
+    const next = price[1]
+    const pre = price[0]
 
+    if (+price[1] !== 0) {
+      searchParams.set('min', pre)
+      searchParams.set('max', next)
+      setSearchParams(searchParams)
+    }
+  }, [price, searchParams, setSearchParams])
+
+  const submitHandler = useCallback(() => {
     const KK =
       spaceName.length !== 0
         ? tripFilter.result.filter(x1 =>
             spaceName.find(x2 => x1.spaceCategory === x2)
           )
         : tripFilter.result
+
     const LLLL =
       +price[1] !== 0
-        ? KK.filter(el => el.price >= +price[0] && el.price <= +price[1])
-        : KK
+        ? tripFilter.result.filter(
+            el => el.price >= +price[0] && el.price <= +price[1]
+          )
+        : tripFilter.result
 
-    dispatch(filterprice(LLLL))
+    const arrr = KK.filter(x1 => LLLL.some(x2 => x1.idx === x2.idx))
+    console.log(LLLL)
+    dispatch(filterprice(arrr))
   }, [dispatch, price, spaceName, tripFilter.result])
 
   useEffect(() => {
     submitHandler()
   }, [submitHandler])
 
+  const orParams = searchParams.get('name') || searchParams.get('max')
+  const andParams = searchParams.get('name') && searchParams.get('max')
   useEffect(() => {
-    if (tripFilter.itemfilter.length > 0 || searchParams.get('name')) {
+    if (searchParams.get('name') && searchParams.get('max')) {
+      /* 조건을 어떻게 하지 */
       const urlNameparams = searchParams.get('name')?.split(',')
       const urlPriceMinParams = searchParams.get('min')
       const uurlPriceManParams = searchParams.get('max')
 
-      const KK = tripFilter.result.filter(x1 =>
-        searchParams
-          .get('name')
-          ?.split(',')
-          .find(x2 => x1.spaceCategory === x2)
+      // const KK = tripFilter.result.filter(x1 =>
+      //   searchParams
+      //     .get('name')
+      //     ?.split(',')
+      //     .find(x2 => x1.spaceCategory === x2)
+      // )
+      console.log(
+        tripFilter.result.filter(x1 =>
+          urlNameparams?.find(x2 => x1.spaceCategory === x2)
+        )
       )
-      dispatch(filterpricedd(KK))
+      const KK = urlNameparams
+        ? tripFilter.result.filter(x1 =>
+            urlNameparams?.find(x2 => x1.spaceCategory === x2)
+          )
+        : tripFilter.result
+      console.log(KK)
+      const LLLL =
+        +uurlPriceManParams! !== 0
+          ? tripFilter.result.filter(
+              el =>
+                el.price >= +urlPriceMinParams! &&
+                el.price <= +uurlPriceManParams!
+            )
+          : tripFilter.result
+
+      const arr2 = KK.filter(x1 => LLLL.some(x2 => x1.idx === x2.idx))
+      console.log(arr2)
+      dispatch(filterprice(arr2))
+      // dispatch(filterpricedd(KK))
       // dispatch(filterpricedd(urlNameparams))
     }
-  }, [dispatch, searchParams, tripFilter.itemfilter.length, tripFilter.result])
+  }, [
+    andParams,
+    dispatch,
+    orParams,
+    price,
+    searchParams,
+    spaceName.length,
+    tripFilter.itemfilter.length,
+    tripFilter.result,
+  ])
 
   return (
     <div>
