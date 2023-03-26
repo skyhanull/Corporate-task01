@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams, useLocation, useSearchParams } from 'react-router-dom'
 import {
@@ -13,7 +13,7 @@ import {
   setlist,
   filterspace,
   filterprice,
-  filterpriced,
+  filterpricedd,
 } from '../../store/trip/tripSlice'
 
 interface Iprice {
@@ -29,31 +29,28 @@ function TripCard() {
 
   const tripFilter = useSelector((state: RootState) => state.Triplist)
   const AAA = tripFilter.result.map((el: any) => el.spaceCategory)
-
+  console.log(tripFilter.itemfilter)
   const category = ['강원', '서울', '부산', '대구', '제주']
 
   const iniparams = searchParams.get('name')
 
-  const namehandler = (names: string) => {
-    if (!spaceName.includes(names)) {
-      spaceName.push(names)
+  const spaceArray = (namek: string) => {
+    if (!spaceName.includes(namek)) {
+      spaceName.push(namek)
     }
+    dispatch(filterspace(name))
     const c = spaceName.join().trim()
     if (iniparams === null) {
-      searchParams.set('name', names)
+      searchParams.set('name', namek)
       setSearchParams(searchParams)
     } else {
       setSearchParams({ name: c })
     }
   }
 
-  const spaceArray = (named: string) => {
-    namehandler(named)
-    // dispatch(filterspace(spaceName))
-  }
-  // todolist?.result.filter(item =>
-  //   clickedBtn.find(sub => item.spaceCategory === sub)
-  // )
+  // const ASDF = (e: any) => {
+  //   setPrice(e.map((item: any) => item.toString()))
+  // }
 
   const filterPriceHandler = (e: any) => {
     const pricearray: Iprice = {
@@ -72,25 +69,30 @@ function TripCard() {
     // return B
   }
 
-  console.log(spaceName.join().trim())
-  console.log(searchParams.getAll('name')?.toString())
+  const submitHandler = () => {
+    // const A = tripFilter.result.filter(x1 =>
+    //   spaceName.length > 0
+    //     ? spaceName.find(x2 => x1.spaceCategory === x2)
+    //     : x1.spaceCategory
+    // )
+    // const Fspace = filterPriceHandler()
+    // const arr2 = A.filter(x1 => Fspace.some(x2 => x1.idx === x2.idx))
+    // dispatch(setlist(arr2))
+    // console.log(arr2)
+    // filterPriceHandler()
+  }
 
-  console.log(searchParams.get('name')?.toString() === spaceName.join().trim())
-
-  const submitHandler = useCallback(() => {
-    // if (searchParams.get('name')?.toString() === spaceName.join().trim()) {
-    dispatch(filterspace(spaceName))
-    // }
-    const A = tripFilter.pricefilter
-    const B = tripFilter.spacefilter
-    const arr2 = A.filter(x1 => B.some(x2 => x1.idx === x2.idx))
-    const KK = [...new Set(arr2)]
-    dispatch(filterpriced(KK))
-  }, [dispatch, spaceName, tripFilter.pricefilter, tripFilter.spacefilter])
-
-  // useEffect(() => {
-  //   submitHandler()
-  // }, [])
+  useEffect(() => {
+    if (tripFilter.itemfilter.length === 0 && searchParams.get('name')) {
+      const KK = tripFilter.result.filter(x1 =>
+        searchParams
+          .get('name')
+          ?.split(',')
+          .find(x2 => x1.spaceCategory === x2)
+      )
+      dispatch(filterpricedd(KK))
+    }
+  }, [dispatch, searchParams, tripFilter.itemfilter.length, tripFilter.result])
 
   return (
     <div>
@@ -112,9 +114,7 @@ function TripCard() {
       <div>
         {tripFilter && tripFilter?.result.map(el => el.idx)}
         {category.map(el => (
-          <button type='button' key={el} onClick={() => spaceArray(el)}>
-            {el}
-          </button>
+          <button onClick={() => spaceArray(el)}>{el}</button>
         ))}
       </div>
       {/* <Link

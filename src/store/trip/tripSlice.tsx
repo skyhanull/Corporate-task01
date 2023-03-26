@@ -1,7 +1,5 @@
-import { createSlice, current } from '@reduxjs/toolkit'
-import { useSelector } from 'react-redux'
+import { createSlice } from '@reduxjs/toolkit'
 import ITravelInfo from '../../types'
-
 import tripApi from './tripThunk'
 
 export interface ITripState {
@@ -10,19 +8,12 @@ export interface ITripState {
   readonly priceRange: ITravelInfo[]
 }
 
-interface Iactionprice {
-  pre: string
-  next: string
-}
-
 const result: ITravelInfo[] = []
 const itemfilter: ITravelInfo[] = []
-const pricefilter: ITravelInfo[] = []
-const spacefilter: ITravelInfo[] = []
 
 export const tripSlice = createSlice({
   name: 'tripSlice',
-  initialState: { result, itemfilter, spacefilter, pricefilter },
+  initialState: { result, itemfilter },
   reducers: {
     setlist: (state, action) => {
       state.result = action.payload
@@ -31,20 +22,21 @@ export const tripSlice = createSlice({
       state.result = action.payload
     },
     filterspace: (state, action) => {
-      console.log(action.payload)
-      const A = state.result.filter(item =>
-        action.payload.find((sub: any) => item.spaceCategory === sub)
+      state.itemfilter = state.result.filter(
+        el => el.spaceCategory === action.payload
       )
-
-      state.spacefilter = [...A, ...state.spacefilter]
     },
     filterprice: (state, action) => {
       const J = state.result.filter(
         el => el.price >= action.payload.pre && el.price <= action.payload.next
       )
-      state.pricefilter = J
+      if (state.itemfilter.length !== 0) {
+        const NK = [...new Set(state.itemfilter)]
+        state.itemfilter = NK
+      }
+      state.itemfilter.push(...J)
     },
-    filterpriced: (state, action) => {
+    filterpricedd: (state, action) => {
       state.itemfilter = action.payload
     },
   },
@@ -55,7 +47,7 @@ export const tripSlice = createSlice({
   },
 })
 
-export const { setlist, filterspace, filterprice, filterpriced } =
+export const { setlist, filterspace, filterprice, filterpricedd } =
   tripSlice.actions
 // store에서 add, remove, complte 액션을 내보낸다.
 export default tripSlice.reducer
