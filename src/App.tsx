@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import MainPage from './pages/MainPage'
 import NotFound from './pages/NotFound'
 import tripApi from './store/trip/tripThunk'
-import { useDispatch } from 'react-redux'
 import { AppDispatch } from './store/store'
+import NavigationPage from './pages/NavigationPage'
+import Reservation from './pages/Reservation'
 
 function App() {
   const dispatch = useDispatch<AppDispatch>()
@@ -18,12 +20,11 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Navigate to='/main' />} />
-          <Route path='/main' element={<MainPage />}>
-            <Route path=':name/:id' element={<MainPage />} />
+          <Route path='/' element={<NavigationPage />}>
+            <Route path='/' element={<Navigate to='/main' />} />
+            <Route path='/main' element={<MainPage />} />
+            <Route path='/reservations' element={<Reservation />} />
           </Route>
-
-          {/* <Route path='/reservations' element={<Reservations />} /> */}
           <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
