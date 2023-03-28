@@ -1,13 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '../../store/store'
-import { addcartlist } from '../../store/resetvation/reservationSlice'
-import ITriplInfo from '../../types'
 import {
   Card,
   CardBody,
   CardFooter,
   Stack,
   Image,
+  useToast,
   Heading,
   Button,
   Text,
@@ -15,6 +13,11 @@ import {
   ButtonGroup,
   useDisclosure,
 } from '@chakra-ui/react'
+import { RootState } from '../../store/store'
+import { addcartlist } from '../../store/resetvation/reservationSlice'
+import ITriplInfo from '../../types'
+import ModalCard from '../modal/modalCard'
+
 function TripCards({
   idx,
   name,
@@ -26,8 +29,10 @@ function TripCards({
   description,
 }: ITriplInfo) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const tripFilter = useSelector((state: RootState) => state.Triplist)
+  const toast = useToast()
+
   const trip = useSelector((state: RootState) => state.reservationSlice)
+
   const dispatch = useDispatch()
   const addListData = {
     idx,
@@ -40,15 +45,37 @@ function TripCards({
     description,
   }
 
-  const addToCartHandler = (idx: number) => {
-    tripFilter.result.find(item => item.idx === idx)
-      ? dispatch(addcartlist(addListData))
-      : null
-    // isOpen()
+  // const openModalHandler = () => {
+  //   dispatch(setSelectedtripList(idx))
+  //   onOpen()
+  // }
+
+  const addToCartHandler = () => {
+    if (trip.result.find(item => item.idx === idx)) {
+      toast({
+        title: '오류',
+        description: '이미 장바구니에 존재합니다.',
+        status: 'warning',
+        duration: 2000,
+        isClosable: true,
+        position: 'top',
+      })
+    } else {
+      toast({
+        title: '예약 완료',
+        description: '장바구니에 추가했습니다.',
+        status: 'info',
+        duration: 500,
+        isClosable: true,
+        position: 'top',
+      })
+      dispatch(addcartlist(addListData))
+    }
   }
 
   return (
     <div>
+      <ModalCard isOpen={isOpen} onClose={onClose} addListData={addListData} />
       <Card
         direction={{ base: 'row' }}
         overflow='hidden'
@@ -81,7 +108,7 @@ function TripCards({
             <Button
               variant='solid'
               colorScheme='blue'
-              onClick={() => addToCartHandler(idx)}
+              onClick={addToCartHandler}
             >
               예약하기
             </Button>
@@ -89,6 +116,7 @@ function TripCards({
               variant='solid'
               colorScheme='teal'
               // onClick={openModalHandler}
+              onClick={onOpen}
             >
               상세정보
             </Button>
