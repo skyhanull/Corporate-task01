@@ -8,15 +8,16 @@ import {
   RangeSliderThumb,
   Button,
 } from '@chakra-ui/react'
-import { RootState } from '../../store/store'
+import { AppDispatch, RootState } from '../../store/store'
 import { filterprice } from '../../store/trip/tripSlice'
+import tripApi from '../../store/trip/tripThunk'
 
 function TripCard() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [spaceName, setSpaceName] = useState<string[]>([])
   const [nameSpaceparam, setNameSpaceParam] = useState('')
   const [price, setPrice] = useState<string[]>(['0', '0'])
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   const tripFilter = useSelector((state: RootState) => state.Triplist)
 
   const category = ['강원', '서울', '부산', '대구', '제주']
@@ -28,9 +29,12 @@ function TripCard() {
     }
   }
 
-  // const resetHandler=()=>{
-
-  // }
+  const resetHandler = () => {
+    searchParams.delete('name')
+    searchParams.delete('min')
+    searchParams.delete('max')
+    setSearchParams(searchParams)
+  }
 
   useEffect(() => {
     const urlNameparams = () => {
@@ -112,7 +116,7 @@ function TripCard() {
         <RangeSliderThumb index={0} />
         <RangeSliderThumb boxSize={6} index={1} />
       </RangeSlider>
-      {/* {(price[0], price[1])} */}
+
       <div>
         min : {price[0]} max : {price[1]}
       </div>
@@ -128,7 +132,9 @@ function TripCard() {
           </Button>
         ))}
       </div>
-      <button type='button'>리셋</button>
+      <button type='button' onClick={resetHandler}>
+        리셋
+      </button>
     </div>
   )
 }
