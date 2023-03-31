@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import getTripInfo from '../../apis/tripApi'
-import axios from 'axios'
 
 const tripApi = createAsyncThunk('api', async () => {
   try {
