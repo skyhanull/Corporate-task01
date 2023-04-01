@@ -1,6 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { access } from 'fs'
-import { useSelector } from 'react-redux'
 
 interface IReservation {
   idx: number
@@ -15,7 +13,7 @@ interface IReservation {
 }
 
 const result: IReservation[] = []
-// const tripFilter = useSelector((state: RootState) => state.Triplist)
+
 export const tripSlice = createSlice({
   name: 'tripSlice',
   initialState: { result },

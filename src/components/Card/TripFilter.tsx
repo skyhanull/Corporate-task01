@@ -9,8 +9,7 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { AppDispatch, RootState } from '../../store/store'
-import { filterprice } from '../../store/trip/tripSlice'
-import tripApi from '../../store/trip/tripThunk'
+import { filterprice, setlist } from '../../store/trip/tripSlice'
 
 function TripCard() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -19,7 +18,6 @@ function TripCard() {
   const [price, setPrice] = useState<string[]>(['0', '0'])
   const dispatch = useDispatch<AppDispatch>()
   const tripFilter = useSelector((state: RootState) => state.Triplist)
-
   const category = ['강원', '서울', '부산', '대구', '제주']
 
   const SpaceHander = (names: string) => {
@@ -30,10 +28,7 @@ function TripCard() {
   }
 
   const resetHandler = () => {
-    searchParams.delete('name')
-    searchParams.delete('min')
-    searchParams.delete('max')
-    setSearchParams(searchParams)
+    window.location.replace('/main')
   }
 
   useEffect(() => {
@@ -55,6 +50,7 @@ function TripCard() {
       searchParams.set('min', pre)
       searchParams.set('max', next)
       setSearchParams(searchParams)
+      window.location.reload()
     }
   }, [price, searchParams, setSearchParams])
 
@@ -88,7 +84,7 @@ function TripCard() {
   }, [price, spaceName, submitHandler])
 
   useEffect(() => {
-    if (searchParams.get('name') && searchParams.get('max')) {
+    if (searchParams.get('name') || searchParams.get('max')) {
       /* 조건을 어떻게 하지 */
       const urlNameparams = searchParams.get('name')?.split(',') as string[]
       const urlPriceMinParams = searchParams.get('min') as string
@@ -96,8 +92,10 @@ function TripCard() {
       const priceUrl = [urlPriceMinParams, uurlPriceManParams]
 
       submitHandler(urlNameparams, priceUrl)
+    } else {
+      dispatch(setlist(tripFilter.result))
     }
-  }, [searchParams, submitHandler])
+  }, [dispatch, searchParams, submitHandler, tripFilter.result])
 
   return (
     <div>
@@ -132,9 +130,10 @@ function TripCard() {
           </Button>
         ))}
       </div>
-      <button type='button' onClick={resetHandler}>
+
+      <Button type='button' onClick={resetHandler}>
         리셋
-      </button>
+      </Button>
     </div>
   )
 }
