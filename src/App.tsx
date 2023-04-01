@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
