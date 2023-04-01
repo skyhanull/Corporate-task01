@@ -2,11 +2,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   Card,
   CardBody,
-  CardFooter,
   Stack,
   Image,
   useToast,
-  Heading,
   Button,
   Text,
   Badge,
@@ -44,11 +42,6 @@ function TripCards({
     registrationDate,
     description,
   }
-
-  // const openModalHandler = () => {
-  //   dispatch(setSelectedtripList(idx))
-  //   onOpen()
-  // }
 
   const addToCartHandler = () => {
     if (trip.result.find(item => item.idx === idx)) {
