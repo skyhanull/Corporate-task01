@@ -5,7 +5,7 @@ const getTripInfo = async () => {
 
   if (response.status === 200) {
     const { data } = response
-    console.log(data)
+
     return data
   }
   return null
