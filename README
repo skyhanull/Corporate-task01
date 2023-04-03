@@ -1,0 +1,37 @@
+# ✈️ 라이크어로컬 pre-onboarding-9th-2-3 과제 제출
+수정
+<p>
+<img alt="Typescript" src="https://img.shields.io/badge/Typescript-v4.9.4-3178C6?style=plastic&logoColor=white%22/%3E"/>
+<img alt="React" src="https://img.shields.io/badge/React-v18.2.0-61DAFB?style=plastic&logo=react&logoColor=white"/>
+<img alt="React Router" src="https://img.shields.io/badge/React Router-v6.8.0-CA4245?style=plastic&logo=reactrouter&logoColor=white"/>
+</p>
+
+
+## ✍ 실행 방법
+
+---
+
+```sh
+git clone // this repository
+cd this file location
+npm install
+npm run dev
+```
+
+## 배포 사이트
+
+
+## 🎆 발전된 부분
+
+```
+1. 처음에 했던 코드와 비교해서 필터링 부분을 hook에서 가공하는 것이 아니고 url query params를 이용하여 Url에 따라 변경되게 구현
+2. url에 필터링된 조건이 있으면 새로고침을 해도 필터링한 리스트가 남아있을 수 있도록 구현
+3. 로컬스토리지를 사용하지 않고 필터링 구현
+```
+
+## 힘들었던 점
+```
+1. usestate hook이 비동기적으로 사용이 되기 때문에 useSearchparams로 url에 바로 key,value를 넣으려 했지만
+비동기로 진행이되어 바로 적용이 되지 않았음 sethook에 함수를 넣어 해결해보려 했지만 작동이 되지 않았음
+해결 방법으로 UseEffect로 이용
+```
