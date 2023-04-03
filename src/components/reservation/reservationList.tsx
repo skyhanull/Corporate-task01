@@ -1,22 +1,7 @@
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Stack,
-  Image,
-  useToast,
-  Heading,
-  Button,
-  Text,
-  Badge,
-  ButtonGroup,
-  useDisclosure,
-  Box,
-  Container,
-} from '@chakra-ui/react'
+import { Card, CardBody, Image, Button, Text, Box } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store/store'
+import { AppDispatch, persistor } from '../../store/store'
 import {
   removeItem,
   patchItem,
@@ -30,6 +15,7 @@ function ReservationList({ item }: any) {
   console.log(amount)
 
   const quantityHandler = () => {
+    persistor.purge()
     dispatch(removeItem(item))
   }
   return (
@@ -68,11 +54,7 @@ function ReservationList({ item }: any) {
           </Box>
         </Box>
       </CardBody>
-      <Button
-        size='xs'
-        colorScheme='red'
-        onClick={() => dispatch(removeList(item))}
-      >
+      <Button size='xs' colorScheme='red' onClick={quantityHandler}>
         x
       </Button>
     </Card>
