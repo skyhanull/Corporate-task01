@@ -23,4 +23,10 @@ module.exports = {
     'react/react-in-jsx-scope': 0,
     'no-param-reassign': 'off',
   },
+  'import/no-extraneous-dependencies': [
+    'error',
+    {
+      devDependencies: ['**/*.test.ts', '**/*.test.tsx'],
+    },
+  ],
 }
