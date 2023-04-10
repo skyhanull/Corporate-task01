@@ -9,10 +9,9 @@ import {
 } from '../../store/resetvation/reservationSlice'
 
 function ReservationList({ item }: any) {
-  const { idx, name, mainImage, price, maximumPurchases, amount } = item
-  const [quantity, setQuantity] = useState(1)
+  const { name, mainImage, price, amount } = item
+
   const dispatch = useDispatch<AppDispatch>()
-  console.log(amount)
 
   const quantityHandler = () => {
     persistor.purge()
