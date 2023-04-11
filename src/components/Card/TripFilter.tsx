@@ -14,7 +14,6 @@ import { filterprice, setlist } from '../../store/trip/tripSlice'
 function TripCard() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [spaceName, setSpaceName] = useState<string[]>([])
-  const [nameSpaceparam, setNameSpaceParam] = useState('')
   const [price, setPrice] = useState<string[]>(['0', '0'])
   const dispatch = useDispatch<AppDispatch>()
   const tripFilter = useSelector((state: RootState) => state.Triplist)
@@ -22,7 +21,6 @@ function TripCard() {
 
   const SpaceHander = (names: string) => {
     if (!spaceName.includes(names)) {
-      setNameSpaceParam(names)
       setSpaceName(prev => [...prev, names])
     }
   }
@@ -40,7 +38,7 @@ function TripCard() {
       }
     }
     urlNameparams()
-  }, [nameSpaceparam, searchParams, setSearchParams, spaceName])
+  }, [searchParams, setSearchParams, spaceName])
 
   useEffect(() => {
     const next = price[1]
@@ -50,26 +48,25 @@ function TripCard() {
       searchParams.set('min', pre)
       searchParams.set('max', next)
       setSearchParams(searchParams)
-      window.location.reload()
     }
   }, [price, searchParams, setSearchParams])
 
   const submitHandler = useCallback(
     (space: string[], priced: string[]) => {
       const filteredSpace =
-        space.length !== 0
+        space?.length !== 0
           ? tripFilter.result.filter(x1 =>
-              space.find(x2 => x1.spaceCategory === x2)
+              space?.find(x2 => x1.spaceCategory === x2)
             )
           : tripFilter.result
-
+      console.log(filteredSpace)
       const filteredPrice =
         +priced[1] !== 0
           ? tripFilter.result.filter(
               el => el.price >= +priced[0] && el.price <= +priced[1]
             )
           : tripFilter.result
-
+      console.log(filteredPrice)
       const filteredAll = filteredSpace.filter(x1 =>
         filteredPrice.some(x2 => x1.idx === x2.idx)
       )
@@ -79,22 +76,29 @@ function TripCard() {
     [dispatch, tripFilter.result]
   )
 
+  console.log(tripFilter.itemfilter)
+
   useEffect(() => {
     submitHandler(spaceName, price)
   }, [price, spaceName, submitHandler])
 
+  console.log(tripFilter.itemfilter)
+
   useEffect(() => {
-    if (searchParams.get('name') || searchParams.get('max')) {
-      /* 조건을 어떻게 하지 */
+    if (
+      searchParams.get('name')?.length !== 0 &&
+      searchParams.get('max')?.length !== 0
+    ) {
       const urlNameparams = searchParams.get('name')?.split(',') as string[]
       const urlPriceMinParams = searchParams.get('min') as string
       const uurlPriceManParams = searchParams.get('max') as string
       const priceUrl = [urlPriceMinParams, uurlPriceManParams]
 
       submitHandler(urlNameparams, priceUrl)
-    } else {
-      dispatch(setlist(tripFilter.result))
     }
+    // else {
+    //   dispatch(setlist(tripFilter.result))
+    // }
   }, [dispatch, searchParams, submitHandler, tripFilter.result])
 
   return (
@@ -114,7 +118,6 @@ function TripCard() {
         <RangeSliderThumb index={0} />
         <RangeSliderThumb boxSize={6} index={1} />
       </RangeSlider>
-
       <div>
         min : {price[0]} max : {price[1]}
       </div>
