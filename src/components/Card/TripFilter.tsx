@@ -54,35 +54,33 @@ function TripCard() {
   const submitHandler = useCallback(
     (space: string[], priced: string[]) => {
       const filteredSpace =
-        space?.length !== 0
+        space?.length !== undefined
           ? tripFilter.result.filter(x1 =>
               space?.find(x2 => x1.spaceCategory === x2)
             )
           : tripFilter.result
-      console.log(filteredSpace)
+
       const filteredPrice =
         +priced[1] !== 0
           ? tripFilter.result.filter(
               el => el.price >= +priced[0] && el.price <= +priced[1]
             )
           : tripFilter.result
-      console.log(filteredPrice)
+
       const filteredAll = filteredSpace.filter(x1 =>
         filteredPrice.some(x2 => x1.idx === x2.idx)
       )
+
+      console.log(filteredAll)
 
       dispatch(filterprice(filteredAll))
     },
     [dispatch, tripFilter.result]
   )
 
-  console.log(tripFilter.itemfilter)
-
   useEffect(() => {
     submitHandler(spaceName, price)
   }, [price, spaceName, submitHandler])
-
-  console.log(tripFilter.itemfilter)
 
   useEffect(() => {
     if (
