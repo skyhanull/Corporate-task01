@@ -7,7 +7,7 @@ function MainPage() {
   const tripFilter = useSelector((state: RootState) => state.Triplist)
 
   const itemDataList =
-    tripFilter.itemfilter?.length > 0
+    tripFilter.itemfilter?.length >= 1
       ? tripFilter.itemfilter
       : tripFilter.result
 
