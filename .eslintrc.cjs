@@ -21,12 +21,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 0,
-    'no-param-reassign': 'off',
+    'import/prefer-default-export': 'off',
+    'no-nested-ternary': 'off',
   },
-  'import/no-extraneous-dependencies': [
-    'error',
-    {
-      devDependencies: ['**/*.test.ts', '**/*.test.tsx'],
-    },
-  ],
 }
