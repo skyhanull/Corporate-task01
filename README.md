@@ -19,7 +19,7 @@ npm run dev
 ```
 
 ## 배포 사이트
-https://corporate-task01-dnb8-bzu6gbsc7-skyhanull.vercel.app/main
+https://corporate-task01-dnb8-hhfmu69sw-skyhanull.vercel.app
 
 
 ## 리팩토링을 진행한 이유
