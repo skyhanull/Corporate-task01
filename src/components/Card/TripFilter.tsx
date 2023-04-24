@@ -71,8 +71,6 @@ function TripCard() {
         filteredPrice.some(x2 => x1.idx === x2.idx)
       )
 
-      console.log(filteredAll)
-
       dispatch(filterprice(filteredAll))
     },
     [dispatch, tripFilter.result]
@@ -94,9 +92,6 @@ function TripCard() {
 
       submitHandler(urlNameparams, priceUrl)
     }
-    // else {
-    //   dispatch(setlist(tripFilter.result))
-    // }
   }, [dispatch, searchParams, submitHandler, tripFilter.result])
 
   return (
