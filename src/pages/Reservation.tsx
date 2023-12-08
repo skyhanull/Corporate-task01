@@ -27,7 +27,7 @@ function Reservation() {
   return (
     <Box alignItems='center'>
       <Text fontSize='5xl' as='u'>
-        장바구니
+        장바구니💡
       </Text>
       <Container
         width='1000px'
